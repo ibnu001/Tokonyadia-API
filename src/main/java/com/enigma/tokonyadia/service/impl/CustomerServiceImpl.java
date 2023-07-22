@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
         HttpEntity<RegisterWalletRequest> entity = new HttpEntity<>(request);
 
         ResponseEntity<WalletResponse> api = restTemplate.exchange(
-                "https://5c9d-2001-448a-2020-e1c9-e492-df98-b1f0-191e.ngrok-free.app/wallets",
+                "http://localhost:8081/wallets",
                 HttpMethod.POST,
                 entity,
                 WalletResponse.class

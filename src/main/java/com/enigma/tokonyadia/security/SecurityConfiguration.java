@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/products").permitAll()
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
