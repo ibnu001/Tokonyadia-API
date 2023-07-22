@@ -1,7 +1,9 @@
 package com.enigma.tokonyadia.controller;
 
 import com.enigma.tokonyadia.entity.Customer;
+import com.enigma.tokonyadia.model.request.RegisterWalletRequest;
 import com.enigma.tokonyadia.model.response.CommonResponse;
+import com.enigma.tokonyadia.model.response.WalletResponse;
 import com.enigma.tokonyadia.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,12 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
+
+    @PostMapping(path = "/wallets")
+    public ResponseEntity<?> createNewWallet(@RequestBody RegisterWalletRequest registerWalletRequest) {
+        WalletResponse wallet = customerService.createWallet(registerWalletRequest);
+        return ResponseEntity.ok().body(wallet);
+    }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")

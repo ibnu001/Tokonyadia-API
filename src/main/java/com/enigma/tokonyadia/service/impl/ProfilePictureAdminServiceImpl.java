@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,11 @@ public class ProfilePictureAdminServiceImpl implements ProfilePictureAdminServic
     @Override
     public FileResponse upload(MultipartFile multipartFile, String adminId) {
         try {
+            List<String> contentTypes = List.of("image/jpeg", "image/png");
+
+            if (!contentTypes.contains(multipartFile.getContentType()))
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "invalid content type");
+
             Admin admin = adminService.getById(adminId);
 
             Path path = Paths.get(root); // /Users/user/Downloads/images
