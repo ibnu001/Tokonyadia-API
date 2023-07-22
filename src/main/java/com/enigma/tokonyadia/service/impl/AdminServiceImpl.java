@@ -23,4 +23,16 @@ public class AdminServiceImpl implements AdminService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "username already exist");
         }
     }
+
+    @Override
+    public Admin getById(String id) {
+        return adminRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "admin not found"));
+    }
+
+    @Override
+    public Admin update(Admin admin) {
+        getById(admin.getId());
+        return adminRepository.save(admin);
+    }
 }

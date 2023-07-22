@@ -17,16 +17,6 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
 
-//    @PostMapping
-//    public ResponseEntity<?> createNewCustomer(@RequestBody Customer customer) {
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(CommonResponse.<Customer>builder()
-//                        .statusCode(HttpStatus.CREATED.value())
-//                        .message("Successfully create new customer")
-//                        .data(customerService.create(customer))
-//                        .build());
-//    }
-
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getAllCustomer(
@@ -65,7 +55,7 @@ public class CustomerController {
     }
 
     @PreAuthorize("hasRole('CUSTOMER') and @userSecurity.checkCustomer(authentication, #id)")
-    @DeleteMapping(path = "/customers/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteCustomer(@PathVariable String id) {
         customerService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK)

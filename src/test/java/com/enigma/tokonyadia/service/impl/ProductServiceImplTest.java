@@ -5,6 +5,7 @@ import com.enigma.tokonyadia.entity.ProductPrice;
 import com.enigma.tokonyadia.entity.Store;
 import com.enigma.tokonyadia.model.request.ProductRequest;
 import com.enigma.tokonyadia.model.response.ProductResponse;
+import com.enigma.tokonyadia.model.response.StoreResponse;
 import com.enigma.tokonyadia.repository.ProductRepository;
 import com.enigma.tokonyadia.service.ProductPriceService;
 import com.enigma.tokonyadia.service.ProductService;
@@ -18,12 +19,20 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -97,7 +106,8 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void getAllByNameOrPrice() {
+    void itShouldReturnPageOfProductResponseWhenGetAllByNameOrPrice() {
+
     }
 
     @Test

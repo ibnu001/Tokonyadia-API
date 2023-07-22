@@ -6,30 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "m_admin")
-public class Admin {
+@Table(name = "m_profile_picture")
+public class ProfilePicture {
 
     @Id
     @GenericGenerator(strategy = "uuid2", name = "system-uuid")
     @GeneratedValue(generator = "system-uuid")
     private String id;
     private String name;
+    private String contentType;
+    private String path;
+    private Long size;
 
-    @Column(name = "email", unique = true)
-    private String email;
-
-    @OneToOne
-    @JoinColumn(name = "profile_picture_id")
-    private ProfilePicture profilePicture;
-
-    @OneToOne
-    @JoinColumn(name = "user_credential_id")
-    private UserCredential userCredential;
 }
