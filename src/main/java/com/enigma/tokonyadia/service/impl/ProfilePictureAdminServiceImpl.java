@@ -2,11 +2,14 @@ package com.enigma.tokonyadia.service.impl;
 
 import com.enigma.tokonyadia.entity.Admin;
 import com.enigma.tokonyadia.entity.ProfilePicture;
+import com.enigma.tokonyadia.model.response.FileResponse;
 import com.enigma.tokonyadia.repository.ProfilePictureRepository;
 import com.enigma.tokonyadia.service.AdminService;
 import com.enigma.tokonyadia.service.ProfilePictureAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,7 +33,7 @@ public class ProfilePictureAdminServiceImpl implements ProfilePictureAdminServic
 
     @Transactional(rollbackOn = Exception.class)
     @Override
-    public void upload(MultipartFile multipartFile, String adminId) {
+    public FileResponse upload(MultipartFile multipartFile, String adminId) {
         try {
             Admin admin = adminService.getById(adminId);
 
@@ -48,7 +52,26 @@ public class ProfilePictureAdminServiceImpl implements ProfilePictureAdminServic
 
             profilePictureRepository.saveAndFlush(picture);
             admin.setProfilePicture(picture);
+
+            return FileResponse.builder()
+                    .fileName(filename)
+                    .url(String.format("/api/v1/admin/%s/image", picture.getId()))
+                    .build();
         } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "image not valid");
+        }
+    }
+
+    @Override
+    public Resource download(String imageId) {
+        ProfilePicture picture = profilePictureRepository.findById(imageId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "profile picture not found"));
+
+        Path path = Paths.get(picture.getPath());
+        try {
+            Resource resource = new UrlResource(path.toUri());
+            return resource;
+        } catch (MalformedURLException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "image not valid");
         }
     }
